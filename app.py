@@ -1,10 +1,16 @@
 import argparse
-import os
+import ast
+import os, sys
 import logging
 import pandas as pd
+from dotenv import load_dotenv
+import os
 
 from homeharvest import scrape_property
 from datetime import datetime
+
+# Load environment variables from .env file
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
 
@@ -18,7 +24,16 @@ def get_property_info(address):
   data = scrape_property(location=address, extra_property_data=True)
   logging.info(f"Found Address: {data['street'].values[0]}, {data['city'].values[0]}, {data['state'].values[0]} {data['zip_code'].values[0]}")
 
-  return data
+  # print(data['tax_history'].to_json(indent=2))
+
+  tax_df = pd.DataFrame(data['tax_history'].to_list()[0])
+  
+  # Flatten the nested dictionary values in 'assessment' into their own columns
+  assessment_flattened = pd.json_normalize(tax_df['assessment'])
+  tax_df = pd.concat([tax_df.drop(columns=['assessment']), assessment_flattened], axis=1)
+  tax_df = tax_df.sort_values(by='year', ascending=False).head(5)
+  
+  return data, tax_df
 
 def get_comps(address, radius, past_days=30):
   df_sold = scrape_property(
@@ -50,7 +65,12 @@ def main(args):
   # How to generate Comparable Market Analysis (CMA) report
   # User input is address
   # Look up details of property
-  target_property = get_property_info(args.address)
+  target_property, tax_df = get_property_info(args.address)
+
+  tax_df.to_csv(f"files/{safe_address}_tax_history.csv", index=False)
+
+  print(tax_df)
+  sys.exit(1)
 
   if target_property['status'].values[0] != "FOR_SALE":
     logging.warning(f"Target Property is not marked sale. Status: {target_property['status'].values[0]}.")
@@ -93,7 +113,11 @@ if __name__ == "__main__":
   parser.add_argument('-a', '--address', type=str, help='Address of the property')
   parser.add_argument('-r', '--radius', type=int, default=10, help='Search radius in miles')
   parser.add_argument('-s', '--save', action='store_true', help='Save to CSV')
-  parser.set_defaults(address="2559 Santa Barbara Loop")
+
+  # Get the address from environment variables
+  address = os.getenv("ADDRESS")
+
+  parser.set_defaults(address=address)
 
   main(parser.parse_args())
 
