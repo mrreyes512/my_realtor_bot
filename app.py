@@ -1,10 +1,8 @@
 import argparse
-import ast
 import os, sys
 import logging
 import pandas as pd
 from dotenv import load_dotenv
-import os
 
 from homeharvest import scrape_property
 from datetime import datetime
@@ -16,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(
 
 logging.getLogger("urllib3").setLevel(logging.ERROR)
 
-now = datetime.now().strftime("%Y%m%d_%H%M%S")
+now = datetime.now().strftime("%Y-%m-%d")
 filename = f"HomeHarvest_{now}.csv"
 
 def get_property_info(address):
@@ -35,42 +33,51 @@ def get_property_info(address):
   
   return data, tax_df
 
-def get_comps(address, radius, past_days=30):
+def get_comps(address, radius, past_days=90):
   df_sold = scrape_property(
     location=address, 
     radius=radius,
     listing_type="sold",
     past_days=past_days
     )
-  # df_pending = scrape_property(
-  #   location=address, 
-  #   radius=radius,
-  #   listing_type="for_sale",
-  #   pending_or_contingent=True
-  #   )
+  df_pending = scrape_property(
+    location=address, 
+    radius=radius,
+    listing_type="for_sale",
+    exclude_pending=False
+    )
   
-  # data = pd.concat([df_sold, df_pending], ignore_index=True, axis=0)
-  return df_sold
+  data = pd.concat([df_sold, df_pending], ignore_index=True, axis=0)
+  return data
 
-def save_to_csv(data, filename):
+def save_to_csv(data, safe_address, filename):
+
+  dirname = ''.join([i for i in safe_address if not i.isdigit()]).lstrip("_")
+  directory = os.path.dirname(f"files/{dirname}")
+  print(dirname)
+  print(directory)
+  print(filename)
+  # Check if the directory exists, if not, create it
+  if directory and not os.path.exists(directory):
+    os.makedirs(directory)
+
+
   # Export to csv
-  data.to_csv(f"files/{filename}", index=False)
-  logging.info(f"Properties to file: files/{filename}")
+  data.to_csv(f"{directory}/{filename}", index=False)
+  logging.info(f"Properties to file: {directory}/{filename}")
 
 def main(args):
+
   # Clean up user input
   safe_address = args.address.split(',')[0].replace(' ', '_')
   logging.info(f"Input: {args.address}")
 
-  # How to generate Comparable Market Analysis (CMA) report
-  # User input is address
   # Look up details of property
   target_property, tax_df = get_property_info(args.address)
 
-  tax_df.to_csv(f"files/{safe_address}_tax_history.csv", index=False)
 
-  print(tax_df)
-  sys.exit(1)
+  # print(tax_df)
+  # sys.exit(1)
 
   if target_property['status'].values[0] != "FOR_SALE":
     logging.warning(f"Target Property is not marked sale. Status: {target_property['status'].values[0]}.")
@@ -99,9 +106,11 @@ def main(args):
   # 2. 10% range of square footage
   # 3. Property must be sold in last 3 months
   if args.save:
-    save_to_csv(sold_comps, filename)
+    save_to_csv(sold_comps, safe_address, filename=f"{now}_comps.csv")
     # Save to CSV with the modified address
-    save_to_csv(target_property, f"{safe_address}.csv")
+    save_to_csv(target_property, safe_address, filename=f"{safe_address}.csv")
+    save_to_csv(tax_df, safe_address, filename=f"tax_history.csv")
+
 
 
 
@@ -111,11 +120,11 @@ if __name__ == "__main__":
 
   parser = argparse.ArgumentParser(description="Real Estate Bot")
   parser.add_argument('-a', '--address', type=str, help='Address of the property')
-  parser.add_argument('-r', '--radius', type=int, default=10, help='Search radius in miles')
+  parser.add_argument('-r', '--radius', type=int, default=1.5, help='Search radius in miles')
   parser.add_argument('-s', '--save', action='store_true', help='Save to CSV')
 
   # Get the address from environment variables
-  address = os.getenv("ADDRESS")
+  address = os.getenv("TARGET_ADDRESS")
 
   parser.set_defaults(address=address)
 
