@@ -51,19 +51,17 @@ def get_comps(address, radius, past_days=90):
     return data
 
 def save_to_csv(data, safe_address, filename):
+    # Remove digits from the safe_address to create the directory name
     dirname = ''.join([i for i in safe_address if not i.isdigit()]).lstrip("_")
-    directory = os.path.dirname(f"files/{dirname}")
-    print(dirname)
-    print(directory)
-    print(filename)
+    directory = f"files/{dirname}"
     
     # Check if the directory exists, if not, create it
-    if directory and not os.path.exists(directory):
+    if not os.path.exists(directory):
         os.makedirs(directory)
 
     # Export to csv
     data.to_csv(f"{directory}/{filename}", index=False)
-    logging.info(f"Properties to file: {directory}/{filename}")
+    logging.info(f"Properties saved to file: {directory}/{filename}")
 
 def main(args):
 
@@ -73,10 +71,6 @@ def main(args):
 
     # Look up details of property
     target_property, tax_df = get_property_info(args.address)
-
-
-    # print(tax_df)
-    # sys.exit(1)
 
     if target_property['status'].values[0] != "FOR_SALE":
         logging.warning(f"Target Property is not marked sale. Status: {target_property['status'].values[0]}.")
