@@ -7,6 +7,7 @@ name = "pypi"
 homeharvest = "*"
 tabulate = "*"
 python-dotenv = "*"
+jinja2 = "*"
 
 [dev-packages]
 
