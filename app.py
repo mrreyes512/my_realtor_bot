@@ -20,9 +20,11 @@ template_path = "./templates"
 def get_property_info(address):
 
     data = scrape_property(location=address, extra_property_data=True)
-    logging.info(f"Found Address: {data['street'].values[0]}, {data['city'].values[0]}, {data['state'].values[0]} {data['zip_code'].values[0]}")
 
-    # print(data['tax_history'].to_json(indent=2))
+    # Fill blank values with None
+    data.fillna(value="", inplace=True)
+
+    logging.info(f"Found Address: {data['street'].values[0]}, {data['city'].values[0]}, {data['state'].values[0]} {data['zip_code'].values[0]}")
 
     tax_df = pd.DataFrame(data['tax_history'].to_list()[0])
     
@@ -30,6 +32,10 @@ def get_property_info(address):
     assessment_flattened = pd.json_normalize(tax_df['assessment'])
     tax_df = pd.concat([tax_df.drop(columns=['assessment']), assessment_flattened], axis=1)
     tax_df = tax_df.sort_values(by='year', ascending=False).head(5)
+    
+    if data['list_price'].values[0] != "":
+        # Add a new column for the percentage comparison of list_price to assessed_value
+        data['listed_to_assessed'] = (data['list_price'] / data['assessed_value'])
     
     return data, tax_df
 
@@ -65,10 +71,10 @@ def save_to_csv(data, directory, filename):
         logging.error("Data is not a pandas DataFrame or string. Cannot save to file.")
 
 
-def format_numbers(value):
-    """Format a number with commas for thousands, millions, or billions."""
+def format_numbers(value, places=0):
+    """Format a number with commas for thousands, millions, or billions, rounded to the specified number of decimal places."""
     try:
-        return "{:,.0f}".format(float(value))
+        return "{:,.{places}f}".format(float(value), places=places)
     except (ValueError, TypeError):
         return value
 
@@ -128,7 +134,7 @@ def main(args):
             os.makedirs(directory)
 
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
-        # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
+        save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
         # save_to_csv(tax_df, directory, filename=f"tax_history.csv")
         save_to_csv(house_report, directory, filename=f"{safe_address}.md")
 

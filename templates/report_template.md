@@ -3,9 +3,7 @@
 > {{ property['street'] }}, {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
 > (**Prepared on**: {{ now }})
 
-- **Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
-- **MLS ID**: {{ property['mls_id'] }}
-- **Days on MLS**: {{ property['days_on_mls'] }}
+**Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
 
 ## Property Details
 - **Year Built**: {{ property['year_built'] }}
@@ -19,7 +17,7 @@
 - **Neighborhood**: {{ property['neighborhoods'] }}
 - **Schools**: {{ property['nearby_schools'] }}
 
-### Taxes Assessment
+### Tax Assessment
 - **Assessed Value**: ${{ property['assessed_value'] | format_numbers }}
 - **Price per Sq Ft**: ${{ (property['assessed_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
 
@@ -27,3 +25,11 @@
 {% for row in tax_df.to_dict(orient="records") -%}
 - {{ row.year }}: ${{ row.tax | format_numbers }} (Assed: ${{ row.total | format_numbers }})
 {% endfor -%}
+
+{% if property['list_price'] != "" %}
+### Listing Info
+- **List Price**: ${{ property['list_price'] | format_numbers }}
+- **Diff to Assessed**: ${{ (property['list_price'] - property['assessed_value']) | format_numbers }} ({{ property['listed_to_assessed'] | format_numbers(2) }}%)
+- **Listing Date**: {{ property['list_date'] }} (Days: {{ property['days_on_mls'] }})
+- **Listing Agent**: {{ property['agent_name'] }} / {{ property['office_name'] }}
+{% endif %}
