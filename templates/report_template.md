@@ -1,8 +1,8 @@
 # CMA: {{ property['street'] }}
 
 > **Prepared on**: {{ now }}
-{{ property['street'] }}
-{{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
+> {{ property['street'] }}
+> {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
 - **Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
 - **MLS ID**: {{ property['mls_id'] }}
 - **Days on MLS**: {{ property['days_on_mls'] }}
