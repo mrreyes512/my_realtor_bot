@@ -15,7 +15,7 @@
 ### Location Info
 - **County**: Williamson
 - **Neighborhood**: Paloma Lake
-- **Schools**: Round Rock Independent School District, Orenda Charter School
+- **Schools**: Orenda Charter School, Round Rock Independent School District
 
 ### Latest Tax Assessment
 **2024**
@@ -26,8 +26,9 @@
 
 ### Listing Info
 - **List Price**: $525,000
+- **Property Status**: Pending
 - **Diff to Assessed**: $7,539 (1.01%)
 - **Listing Date**: 2025-02-07 (Days: 2)
 - **Listing Agent**: [Sonia Guardado](mailto:Sonia@MagnoliaRealty.com) / [5125072935](callto:5125072935)
 - **Broker**: Magnolia Realty Round Rock
-- **MLS ID**: 5496268
+- **MLS / ID**: AUTX / 5496268

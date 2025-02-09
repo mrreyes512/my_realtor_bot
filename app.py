@@ -76,15 +76,15 @@ def format_numbers(value, places=0):
     except (ValueError, TypeError):
         return value
 
-def generate_property_report(target_df):
+def generate_report(data, report):
 
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
     env.filters['format_numbers'] = format_numbers
-    template = env.get_template("property_report.j2")
+    template = env.get_template(f"{report}.j2")
 
-    # Render the template with the data
-    report_content = template.render(property=target_df.iloc[0], now=now)
+    if report == "property_report":
+        report_content = template.render(property=data.iloc[0], now=now)
     
     return report_content
 
@@ -119,8 +119,8 @@ def main(args):
 
     comps_df = get_comps(address=args.address, radius=args.radius)
 
-    house_report = generate_property_report(target_df)
-    print(house_report)
+    property_report = generate_report(target_df, report='property_report')
+    print(property_report)
 
     if args.save:
         # Remove digits from the safe_address to create the directory name
@@ -134,7 +134,7 @@ def main(args):
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
         # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
 
-        save_to_csv(house_report, directory, filename=f"{safe_address}.md")
+        save_to_csv(property_report, directory, filename=f"{safe_address}.md")
 
 
 if __name__ == "__main__":
