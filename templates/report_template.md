@@ -1,8 +1,8 @@
 # CMA: {{ property['street'] }}
 
-> **Prepared on**: {{ now }}
-> {{ property['street'] }}
-> {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
+> {{ property['street'] }}, {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
+> (**Prepared on**: {{ now }})
+
 - **Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
 - **MLS ID**: {{ property['mls_id'] }}
 - **Days on MLS**: {{ property['days_on_mls'] }}
@@ -19,13 +19,11 @@
 - **Neighborhood**: {{ property['neighborhoods'] }}
 - **Schools**: {{ property['nearby_schools'] }}
 
-### Value, Tax, and History
+### Taxes Assessment
 - **Assessed Value**: ${{ property['assessed_value'] | format_numbers }}
-- **Estimated Value**: ${{ property['estimated_value'] | format_numbers }}
-- **Price per Sq Ft**: ${{ (property['estimated_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
-- **Last Sold Date**: {{ property['last_sold_date'] }}
+- **Price per Sq Ft**: ${{ (property['assessed_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
 
-**Taxes**
+**History**
 {% for row in tax_df.to_dict(orient="records") -%}
 - {{ row.year }}: ${{ row.tax | format_numbers }} (Assed: ${{ row.total | format_numbers }})
 {% endfor -%}

@@ -12,11 +12,9 @@ from datetime import datetime
 load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
-
 logging.getLogger("urllib3").setLevel(logging.ERROR)
 
 now = datetime.now().strftime("%Y-%m-%d")
-filename = f"HomeHarvest_{now}.csv"
 template_path = "./templates"
 
 def get_property_info(address):
