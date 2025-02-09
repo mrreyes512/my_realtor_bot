@@ -1,4 +1,4 @@
-# CMA: {{ property['street'] }}
+# {{ property['street'] }}
 
 > {{ property['street'] }}, {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
 > (**Prepared on**: {{ now }})
@@ -31,4 +31,5 @@
 - **Listing Date**: {{ property['list_date'] }} (Days: {{ property['days_on_mls'] }})
 - **Listing Agent**: [{{ property['agent_name'] }}](mailto:{{ property['agent_email'] }}) / [{{ property['agent_phones'][0]['number'] }}](callto:{{ property['agent_phones'][0]['number'] }})
 - **Broker**: {{ property['office_name'] }}
+- **MLS ID**: {{ property['mls_id'] }}
 {% endif %}

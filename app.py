@@ -52,7 +52,6 @@ def get_comps(address, radius=1.5, past_days=90):
     cols = ['street'] + [col for col in data if col != 'street']
     data = data[cols]
 
-
     return data
 
 def save_to_csv(data, directory, filename):
@@ -82,7 +81,7 @@ def generate_property_report(target_df):
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
     env.filters['format_numbers'] = format_numbers
-    template = env.get_template("report_template.md")
+    template = env.get_template("property_report.j2")
 
     # Render the template with the data
     report_content = template.render(property=target_df.iloc[0], now=now)
