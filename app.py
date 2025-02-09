@@ -73,25 +73,45 @@ def format_currency(value):
     except (ValueError, TypeError):
         return value
 
+def format_numbers(value):
+    """Format a number with commas for thousands, millions, or billions."""
+    try:
+        return "{:,.0f}".format(float(value))
+    except (ValueError, TypeError):
+        return value
+
 def generate_report(target_df, tax_df):
 
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
-    env.filters['format_currency'] = format_currency
+    env.filters['format_numbers'] = format_numbers
     template = env.get_template("report_template.md")
+
+    # Calculate price per square foot
+    estimated_value = target_df['estimated_value'].values[0]
+    sqft = target_df['sqft'].values[0]
+    price_per_sqft = estimated_value / sqft if sqft else 0
 
     # Prepare the data for the template
     data = {
+        "now": now,
         "street": target_df['street'].values[0],
         "city": target_df['city'].values[0],
         "state": target_df['state'].values[0],
         "zip_code": target_df['zip_code'].values[0],
+        "neighborhood": target_df['neighborhoods'].values[0],
+        "county": target_df['county'].values[0],
         "property_url": target_df['property_url'].values[0],
         "beds": target_df['beds'].values[0],
+        "baths": target_df['full_baths'].values[0],
+        "half_baths": target_df['half_baths'].values[0],
         "sqft": target_df['sqft'].values[0],
         "lot_sqft": target_df['lot_sqft'].values[0],
         "year_built": target_df['year_built'].values[0],
         "last_sold_date": target_df['last_sold_date'].values[0],
+        "estimated_value": target_df['estimated_value'].values[0],
+        "assessed_value": target_df['assessed_value'].values[0],
+        "price_per_sqft": price_per_sqft,
         "tax_history": tax_df.to_dict(orient="records")
     }
 
@@ -140,7 +160,7 @@ def main(args):
             os.makedirs(directory)
 
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
-        # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
+        save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
         # save_to_csv(tax_df, directory, filename=f"tax_history.csv")
         save_to_csv(house_report, directory, filename=f"{safe_address}.md")
 

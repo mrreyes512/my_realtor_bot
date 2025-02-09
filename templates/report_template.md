@@ -1,19 +1,25 @@
-# Property Report
+# Property Report - {{ now }}
 
 **Prepared for**: 
 [{{ street }}]({{ property_url }})
 {{ city }}, {{ state }} {{ zip_code }}
+- **County**: {{ county }}
+- **Neighborhood**: {{ neighborhood }}
 
 ## Property Details
-- **Bedrooms**: {{ beds }}
-- **Square Footage**: {{ sqft }}
-- **Lot Size**: {{ lot_sqft }}
+- **Beds / Baths / Half Baths**: {{ beds }} / {{ baths }} / {{ half_baths }}
+- **Square Footage**: {{ sqft | format_numbers }}
+- **Lot Size**: {{ lot_sqft | format_numbers }}
 - **Year Built**: {{ year_built }}
 - **Last Sold Date**: {{ last_sold_date }}
 
-## Tax History
+## Home Value and Tax History
+- Assessed Value: ${{ assessed_value | format_numbers }}
+- Estimated Value: ${{ estimated_value | format_numbers }}
+- Price Sq Ft: ${{ price_per_sqft | format_numbers }}/ft
+
 | Year | Total Tax | Assessment Value |
 |------|-----------|------------------|
 {% for row in tax_history -%}
-| {{ row.year }} | {{ row.tax | format_currency }} | {{ row.total | format_currency }} |
+| {{ row.year }} | ${{ row.tax | format_numbers }} | ${{ row.total | format_numbers }} |
 {% endfor -%}
