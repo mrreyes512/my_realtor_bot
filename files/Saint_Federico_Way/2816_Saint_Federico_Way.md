@@ -1,7 +1,7 @@
-# Property Report - 2025-02-08
+# CMA: 2816 Saint Federico Way
 
-**Prepared for**: 
-### 2816 Saint Federico Way
+> **Prepared on**: 2025-02-08
+2816 Saint Federico Way
 Round Rock, TX 78665
 - **Realtor.com ID**: [7313637146](https://www.realtor.com/realestateandhomes-detail/2816-Saint-Federico-Way_Round-Rock_TX_78665_M73136-37146)
 - **MLS ID**: 5496268
@@ -17,7 +17,7 @@ Round Rock, TX 78665
 ### Location Info
 - **County**: Williamson
 - **Neighborhood**: Paloma Lake
-- **Schools**: Round Rock Independent School District, Orenda Charter School
+- **Schools**: Orenda Charter School, Round Rock Independent School District
 
 ### Value, Tax, and History
 - **Assessed Value**: $517,461

@@ -1,7 +1,7 @@
-# Property Report - {{ now }}
+# CMA: {{ property['street'] }}
 
-**Prepared for**: 
-### {{ property['street'] }}
+> **Prepared on**: {{ now }}
+{{ property['street'] }}
 {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
 - **Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
 - **MLS ID**: {{ property['mls_id'] }}
