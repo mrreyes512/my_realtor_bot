@@ -32,4 +32,5 @@
 - **List Price**: $525,000
 - **Diff to Assessed**: $7,539 (1.01%)
 - **Listing Date**: 2025-02-07 (Days: 2)
-- **Listing Agent**: Sonia Guardado / Magnolia Realty Round Rock
+- **Listing Agent**: [Sonia Guardado](mailto: Sonia@MagnoliaRealty.com) / [5125072935](callto:5125072935)
+- **Broker**: Magnolia Realty Round Rock
