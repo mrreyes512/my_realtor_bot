@@ -25,19 +25,12 @@ def get_property_info(address):
     data.fillna(value="", inplace=True)
 
     logging.info(f"Found Address: {data['street'].values[0]}, {data['city'].values[0]}, {data['state'].values[0]} {data['zip_code'].values[0]}")
-
-    tax_df = pd.DataFrame(data['tax_history'].to_list()[0])
-    
-    # Flatten the nested dictionary values in 'assessment' into their own columns
-    assessment_flattened = pd.json_normalize(tax_df['assessment'])
-    tax_df = pd.concat([tax_df.drop(columns=['assessment']), assessment_flattened], axis=1)
-    tax_df = tax_df.sort_values(by='year', ascending=False).head(5)
     
     if data['list_price'].values[0] != "":
         # Add a new column for the percentage comparison of list_price to assessed_value
         data['listed_to_assessed'] = (data['list_price'] / data['assessed_value'])
     
-    return data, tax_df
+    return data
 
 def get_comps(address, radius=1.5, past_days=90):
     df_sold = scrape_property(
@@ -84,7 +77,7 @@ def format_numbers(value, places=0):
     except (ValueError, TypeError):
         return value
 
-def generate_report(target_df, tax_df):
+def generate_property_report(target_df):
 
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
@@ -92,7 +85,7 @@ def generate_report(target_df, tax_df):
     template = env.get_template("report_template.md")
 
     # Render the template with the data
-    report_content = template.render(property=target_df.iloc[0], tax_df=tax_df, now=now)
+    report_content = template.render(property=target_df.iloc[0], now=now)
     
     return report_content
 
@@ -112,7 +105,7 @@ def main(args):
     logging.info(f"Input: {args.address}")
 
     # Look up details of property
-    target_df, tax_df = get_property_info(args.address)
+    target_df = get_property_info(args.address)
 
     if target_df['status'].values[0] != "FOR_SALE":
         logging.warning(f"Target Property is not marked sale. Status: {target_df['status'].values[0]}.")
@@ -127,7 +120,7 @@ def main(args):
 
     comps_df = get_comps(address=args.address, radius=args.radius)
 
-    house_report = generate_report(target_df, tax_df)
+    house_report = generate_property_report(target_df)
     print(house_report)
 
     if args.save:
@@ -140,8 +133,8 @@ def main(args):
             os.makedirs(directory)
 
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
-        save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
-        # save_to_csv(tax_df, directory, filename=f"tax_history.csv")
+        # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
+
         save_to_csv(house_report, directory, filename=f"{safe_address}.md")
 
 

@@ -22,8 +22,9 @@
 - **Price per Sq Ft**: ${{ (property['assessed_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
 
 **History**
-{% for row in tax_df.to_dict(orient="records") -%}
-- {{ row.year }}: ${{ row.tax | format_numbers }} (Assed: ${{ row.total | format_numbers }})
+{% set sorted_tax_history = property['tax_history'] | sort(attribute='year', reverse=True) %}
+{% for row in sorted_tax_history[:5] -%}
+- {{ row.year }}: ${{ row.tax | format_numbers }} (Assessed: ${{ row.assessment.total | format_numbers }})
 {% endfor -%}
 
 {% if property['list_price'] != "" %}
