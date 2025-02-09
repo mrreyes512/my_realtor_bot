@@ -1,10 +1,10 @@
 # Property Report
 
-## Address
-{{ street }}, {{ city }}, {{ state }} {{ zip_code }}
+**Prepared for**: 
+[{{ street }}]({{ property_url }})
+{{ city }}, {{ state }} {{ zip_code }}
 
-## Details
-- **URL**: [{{ property_url }}]({{ property_url }})
+## Property Details
 - **Bedrooms**: {{ beds }}
 - **Square Footage**: {{ sqft }}
 - **Lot Size**: {{ lot_sqft }}

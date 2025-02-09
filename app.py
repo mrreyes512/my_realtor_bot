@@ -101,6 +101,11 @@ def generate_report(target_df, tax_df):
     return report_content
 
 def main(args):
+    # Set logging level based on the debug flag
+    if args.debug:
+        logging.getLogger().setLevel(logging.INFO)
+    else:
+        logging.getLogger().setLevel(logging.WARNING)
 
     # Clean up user input
     safe_address = args.address.split(',')[0].replace(' ', '_')
@@ -141,12 +146,13 @@ def main(args):
 
 
 if __name__ == "__main__":
-    logging.info(f"{'='* 10} Starting {os.path.basename(__file__)} {'='* 10}")
+    # logging.info(f"{'='* 10} Starting {os.path.basename(__file__)} {'='* 10}")
 
     parser = argparse.ArgumentParser(description="Real Estate Bot")
     parser.add_argument('-a', '--address', type=str, help='Address of the property')
     parser.add_argument('-r', '--radius', type=int, default=1.5, help='Search radius in miles')
     parser.add_argument('-s', '--save', action='store_true', help='Save to CSV')
+    parser.add_argument('-d', '--debug', action='store_true', help='Enable debug statements')
 
     # Get the address from environment variables
     address = os.getenv("TARGET_ADDRESS")
