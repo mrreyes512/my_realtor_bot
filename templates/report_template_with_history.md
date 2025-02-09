@@ -17,12 +17,15 @@
 - **Neighborhood**: {{ property['neighborhoods'] }}
 - **Schools**: {{ property['nearby_schools'] }}
 
-### Latest Tax Assessment
-{% set recent_tax = property['tax_history'] | sort(attribute='year', reverse=True) | first -%}
-**{{ recent_tax.year }}**
-- **Assessed**: ${{ recent_tax.assessment.total | format_numbers }}
-- **Taxes**: ${{ recent_tax.tax | format_numbers }}
-- **Sq Ft**: ${{ (recent_tax.assessment.total / property['sqft']) | format_numbers if property['sqft'] else 0 }}/ft
+### Tax Assessment
+- **Assessed Value**: ${{ property['assessed_value'] | format_numbers }}
+- **Price per Sq Ft**: ${{ (property['assessed_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
+
+**History**
+{% set sorted_tax_history = property['tax_history'] | sort(attribute='year', reverse=True) %}
+{% for row in sorted_tax_history[:5] -%}
+- {{ row.year }}: ${{ row.tax | format_numbers }} (Assessed: ${{ row.assessment.total | format_numbers }})
+{% endfor -%}
 
 {% if property['list_price'] != "" %}
 ### Listing Info

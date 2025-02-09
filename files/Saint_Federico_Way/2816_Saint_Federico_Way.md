@@ -15,19 +15,14 @@
 ### Location Info
 - **County**: Williamson
 - **Neighborhood**: Paloma Lake
-- **Schools**: Round Rock Independent School District, Orenda Charter School
+- **Schools**: Orenda Charter School, Round Rock Independent School District
 
-### Tax Assessment
-- **Assessed Value**: $517,461
-- **Price per Sq Ft**: $172
+### Latest Tax Assessment
+**2024**
+- **Assessed**: $517,461
+- **Taxes**: $10,965
+- **Sq Ft**: $172/ft
 
-**History**
-
-- 2024: $10,965 (Assessed: $517,461)
-- 2023: $10,811 (Assessed: $470,419)
-- 2022: $10,898 (Assessed: $427,654)
-- 2021: $10,758 (Assessed: $388,776)
-- 2020: $9,849 (Assessed: $386,172)
 
 ### Listing Info
 - **List Price**: $525,000
