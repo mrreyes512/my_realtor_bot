@@ -130,7 +130,7 @@ def main(args):
             os.makedirs(directory)
 
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
-        save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
+        # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
         # save_to_csv(tax_df, directory, filename=f"tax_history.csv")
         save_to_csv(house_report, directory, filename=f"{safe_address}.md")
 
