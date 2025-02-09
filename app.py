@@ -17,7 +17,7 @@ logging.getLogger("urllib3").setLevel(logging.ERROR)
 
 now = datetime.now().strftime("%Y-%m-%d")
 filename = f"HomeHarvest_{now}.csv"
-template_path = "/Users/c8q9cp/dev/my_realtor_bot/templates"
+template_path = "./templates"
 
 def get_property_info(address):
 
