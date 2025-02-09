@@ -1,25 +1,31 @@
 # Property Report - {{ now }}
 
 **Prepared for**: 
-[{{ street }}]({{ property_url }})
-{{ city }}, {{ state }} {{ zip_code }}
-- **County**: {{ county }}
-- **Neighborhood**: {{ neighborhood }}
+### {{ property['street'] }}
+{{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
+- **Realtor.com ID**: [{{ property['property_id']}}]({{ property['property_url'] }})
+- **MLS ID**: {{ property['mls_id'] }}
+- **Days on MLS**: {{ property['days_on_mls'] }}
 
 ## Property Details
-- **Beds / Baths / Half Baths**: {{ beds }} / {{ baths }} / {{ half_baths }}
-- **Square Footage**: {{ sqft | format_numbers }}
-- **Lot Size**: {{ lot_sqft | format_numbers }}
-- **Year Built**: {{ year_built }}
-- **Last Sold Date**: {{ last_sold_date }}
+- **Year Built**: {{ property['year_built'] }}
+- **Beds / Baths / Half Baths**: {{ property['beds'] }} / {{ property['full_baths'] }} / {{ property['half_baths'] }}
+- **Stories / Garages**: {{ property['stories'] }} / {{ property['parking_garage'] }}
+- **Square Footage**: {{ property['sqft'] | format_numbers }}
+- **Lot Size**: {{ property['lot_sqft'] | format_numbers }}
 
-## Home Value and Tax History
-- Assessed Value: ${{ assessed_value | format_numbers }}
-- Estimated Value: ${{ estimated_value | format_numbers }}
-- Price Sq Ft: ${{ price_per_sqft | format_numbers }}/ft
+### Location Info
+- **County**: {{ property['county'] }}
+- **Neighborhood**: {{ property['neighborhoods'] }}
+- **Schools**: {{ property['nearby_schools'] }}
 
-| Year | Total Tax | Assessment Value |
-|------|-----------|------------------|
-{% for row in tax_history -%}
-| {{ row.year }} | ${{ row.tax | format_numbers }} | ${{ row.total | format_numbers }} |
+### Value, Tax, and History
+- **Assessed Value**: ${{ property['assessed_value'] | format_numbers }}
+- **Estimated Value**: ${{ property['estimated_value'] | format_numbers }}
+- **Price per Sq Ft**: ${{ (property['estimated_value'] / property['sqft']) | format_numbers if property['sqft'] else 0 }}
+- **Last Sold Date**: {{ property['last_sold_date'] }}
+
+**Taxes**
+{% for row in tax_df.to_dict(orient="records") -%}
+- {{ row.year }}: ${{ row.tax | format_numbers }} (Assed: ${{ row.total | format_numbers }})
 {% endfor -%}
