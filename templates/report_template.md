@@ -31,6 +31,6 @@
 - **List Price**: ${{ property['list_price'] | format_numbers }}
 - **Diff to Assessed**: ${{ (property['list_price'] - property['assessed_value']) | format_numbers }} ({{ property['listed_to_assessed'] | format_numbers(2) }}%)
 - **Listing Date**: {{ property['list_date'] }} (Days: {{ property['days_on_mls'] }})
-- **Listing Agent**: [{{ property['agent_name'] }}](mailto: {{ property['agent_email'] }}) / [{{ property['agent_phones'][0]['number'] }}](callto:{{ property['agent_phones'][0]['number'] }})
+- **Listing Agent**: [{{ property['agent_name'] }}](mailto:{{ property['agent_email'] }}) / [{{ property['agent_phones'][0]['number'] }}](callto:{{ property['agent_phones'][0]['number'] }})
 - **Broker**: {{ property['office_name'] }}
 {% endif %}
