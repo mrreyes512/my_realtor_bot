@@ -39,7 +39,7 @@ def get_property_info(address):
     
     return data, tax_df
 
-def get_comps(address, radius, past_days=90):
+def get_comps(address, radius=1.5, past_days=90):
     df_sold = scrape_property(
         location=address, 
         radius=radius,
@@ -54,6 +54,12 @@ def get_comps(address, radius, past_days=90):
     )
   
     data = pd.concat([df_sold, df_pending], ignore_index=True, axis=0)
+    data.drop(columns=['text'], inplace=True)
+    # Move the 'street' column to the first position
+    cols = ['street'] + [col for col in data if col != 'street']
+    data = data[cols]
+
+
     return data
 
 def save_to_csv(data, directory, filename):
