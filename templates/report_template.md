@@ -15,5 +15,5 @@
 | Year | Total Tax | Assessment Value |
 |------|-----------|------------------|
 {% for row in tax_history -%}
-| {{ row.year }} | {{ row.tax }} | {{ row.total }} |
+| {{ row.year }} | {{ row.tax | format_currency }} | {{ row.total | format_currency }} |
 {% endfor -%}

@@ -53,21 +53,31 @@ def get_comps(address, radius, past_days=90):
     return data
 
 def save_to_csv(data, directory, filename):
-    
-    # Check if the directory exists, if not, create it
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
-    # Export to csv
-    data.to_csv(f"{directory}/{filename}", index=False)
-    logging.info(f"Properties saved to file: {directory}/{filename}")
+    # Check if data is a DataFrame
+    if isinstance(data, pd.DataFrame):
+        data.to_csv(f"{directory}/{filename}", index=False)
+        logging.info(f"CSV saved to file: {directory}/{filename}")
+    # Check if data is a string
+    elif isinstance(data, str):
+        with open(f"{directory}/{filename}", "w") as file:
+            file.write(data)
+        logging.info(f"Data saved to file: {directory}/{filename}")
+    else:
+        logging.error("Data is not a pandas DataFrame or string. Cannot save to file.")
 
-def generate_report(target_df, tax_df, directory, filename):
-    # Ensure the directory exists
-    os.makedirs(os.path.dirname(directory), exist_ok=True)
+def format_currency(value):
+    """Format a number as currency."""
+    try:
+        return "${:,.0f}".format(float(value))
+    except (ValueError, TypeError):
+        return value
+
+def generate_report(target_df, tax_df):
 
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
+    env.filters['format_currency'] = format_currency
     template = env.get_template("report_template.md")
 
     # Prepare the data for the template
@@ -87,12 +97,8 @@ def generate_report(target_df, tax_df, directory, filename):
 
     # Render the template with the data
     report_content = template.render(data)
-
-    # Save the report to a file
-    with open(f"{directory}/{filename}", "w") as file:
-        file.write(report_content)
-
-    logging.info(f"Report saved to file: {directory}/{filename}")
+    
+    return report_content
 
 def main(args):
 
@@ -109,23 +115,30 @@ def main(args):
     if args.address == target_df['street'].values[0]:
         logging.info(f"URL: {target_df['property_url'].values[0]}")
     else:
-        logging.warning(f"Target address does not match the found address.")
-        logging.warning(f"Target Address: {args.address}")
-        logging.warning(f"Found    Address: {target_df['street'].values[0]}, {target_df['city'].values[0]}, {target_df['state'].values[0]} {target_df['zip_code'].values[0]}")
+        logging.error(f"Target address does not match the found address.")
+        logging.error(f"Target Address: {args.address}")
+        logging.error(f"Found    Address: {target_df['street'].values[0]}, {target_df['city'].values[0]}, {target_df['state'].values[0]} {target_df['zip_code'].values[0]}")
         exit(1)
 
     comps_df = get_comps(address=args.address, radius=args.radius)
+
+    house_report = generate_report(target_df, tax_df)
+    print(house_report)
 
     if args.save:
         # Remove digits from the safe_address to create the directory name
         dirname = ''.join([i for i in safe_address if not i.isdigit()]).lstrip("_")
         directory = f"files/{dirname}"
 
+        # Check if the directory exists, if not, create it
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
         save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
         # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
         # save_to_csv(tax_df, directory, filename=f"tax_history.csv")
+        save_to_csv(house_report, directory, filename=f"{safe_address}.md")
 
-        generate_report(target_df, tax_df, directory, filename=f"{safe_address}.md")
 
 if __name__ == "__main__":
     logging.info(f"{'='* 10} Starting {os.path.basename(__file__)} {'='* 10}")
