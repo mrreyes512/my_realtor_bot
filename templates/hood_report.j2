@@ -1,0 +1,19 @@
+# Comps - {{ property['street'] }}
+> {{ property['street'] }}, {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
+> (**Prepared on**: {{ now }})
+
+## Property Details
+- **List Price**: ${{ property['list_price'] | format_numbers }}
+- **Square Footage**: {{ property['sqft'] | format_numbers }}
+- **Lot Size**: {{ property['lot_sqft'] | format_numbers }}
+- **Beds | Baths | Half Baths**: {{ property['beds'] }} | {{ property['full_baths'] }} | {{ property['half_baths'] }}
+- **Stories | Garages**: {{ property['stories'] }} | {{ property['parking_garage'] }}
+- **County**: {{ property['county'] }}
+- **Neighborhood**: {{ property['neighborhoods'] }}
+
+## Details - {{ property['neighborhoods'] }}
+> Past 3 Months
+
+- **Total Sold Properties**: {{ comps | selectattr("status", "equalto", "SOLD") | list | count }}
+
+

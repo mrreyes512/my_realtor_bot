@@ -48,11 +48,20 @@ def get_comps(address, radius=1.5, past_days=90):
   
     data = pd.concat([df_sold, df_pending], ignore_index=True, axis=0)
     data.drop(columns=['text'], inplace=True)
+    
+    # Add property_target column
+    data['property_target'] = data['street'].apply(lambda x: x == address)
+    
     # Move the 'street' column to the first position
     cols = ['street'] + [col for col in data if col != 'street']
     data = data[cols]
+    
+    # Filter homes in the same neighborhood
+    target_hood = data[data['property_target'] == True]['neighborhoods'].values[0]
+    hood_df = data[data['neighborhoods'] == target_hood]
+    area_df = data[data['neighborhoods'] != target_hood]
 
-    return data
+    return area_df, hood_df
 
 def save_to_csv(data, directory, filename):
 
@@ -85,7 +94,14 @@ def generate_report(data, report):
 
     if report == "property_report":
         report_content = template.render(property=data.iloc[0], now=now)
-    
+
+    if report == "hood_report":
+        # Get the first match of property_target = TRUE
+        property_target = data[data['property_target'] == True].iloc[0]
+        comps = data[data['property_target'] == False].reset_index(drop=True)
+        print(comps)
+        report_content = template.render(property=property_target, comps=comps.to_dict(orient='records'), now=now)
+
     return report_content
 
 def main(args):
@@ -117,10 +133,12 @@ def main(args):
         logging.error(f"Found    Address: {target_df['street'].values[0]}, {target_df['city'].values[0]}, {target_df['state'].values[0]} {target_df['zip_code'].values[0]}")
         exit(1)
 
-    comps_df = get_comps(address=args.address, radius=args.radius)
+    area_df, hood_df = get_comps(address=args.address, radius=args.radius)
 
     property_report = generate_report(target_df, report='property_report')
-    print(property_report)
+    # print(property_report)
+    hood_report = generate_report(hood_df, report='hood_report')
+    print(hood_report)
 
     if args.save:
         # Remove digits from the safe_address to create the directory name
@@ -131,7 +149,7 @@ def main(args):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        save_to_csv(comps_df, directory, filename=f"{now}_comps.csv")
+        save_to_csv(hood_df, directory, filename=f"comps_{now}.csv")
         # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
 
         save_to_csv(property_report, directory, filename=f"{safe_address}.md")
