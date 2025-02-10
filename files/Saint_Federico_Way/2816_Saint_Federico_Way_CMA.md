@@ -7,10 +7,10 @@
 
 ## Property Details
 - **Year Built**: 2012
-- **Beds | Baths | Half Baths**: 3 | 2 | 1
-- **Stories | Garages**: 2 | 3
-- **Square Footage**: 3,016
-- **Lot Size**: 8,560
+- **Beds | Baths**: 3 / 2.5
+- **Stories | Garages**: 2 / 3
+- **Square Footage**: 3,016 sqft
+- **Lot Size**: 8,560 sqft
 
 ### Location Info
 - **County**: Williamson
@@ -21,7 +21,7 @@
 **2024**
 - **Assessed**: $517,461
 - **Taxes**: $10,965
-- **Sq Ft**: $172/ft
+- **Sq Ft**: $172 / ft
 
 
 ### Listing Info

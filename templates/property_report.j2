@@ -7,10 +7,10 @@
 
 ## Property Details
 - **Year Built**: {{ property['year_built'] }}
-- **Beds | Baths | Half Baths**: {{ property['beds'] }} | {{ property['full_baths'] }} | {{ property['half_baths'] }}
-- **Stories | Garages**: {{ property['stories'] }} | {{ property['parking_garage'] }}
-- **Square Footage**: {{ property['sqft'] | format_numbers }}
-- **Lot Size**: {{ property['lot_sqft'] | format_numbers }}
+- **Beds | Baths**: {{ property['beds'] }} / {{ property['full_baths'] }}{% if property['half_baths'] is not none %}.5{% endif %}
+- **Stories | Garages**: {{ property['stories'] }} / {{ property['parking_garage'] }}
+- **Square Footage**: {{ property['sqft'] | format_numbers }} sqft
+- **Lot Size**: {{ property['lot_sqft'] | format_numbers }} sqft
 
 ### Location Info
 - **County**: {{ property['county'] }}
@@ -22,7 +22,7 @@
 **{{ recent_tax.year }}**
 - **Assessed**: ${{ recent_tax.assessment.total | format_numbers }}
 - **Taxes**: ${{ recent_tax.tax | format_numbers }}
-- **Sq Ft**: ${{ (recent_tax.assessment.total / property['sqft']) | format_numbers if property['sqft'] else 0 }}/ft
+- **Sq Ft**: ${{ (recent_tax.assessment.total / property['sqft']) | format_numbers if property['sqft'] else 0 }} / ft
 
 {% if property['list_price'] != "" %}
 ### Listing Info
