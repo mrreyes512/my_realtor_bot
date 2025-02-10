@@ -15,6 +15,6 @@
 
 **Sold Listings**
 {% for row in sold_comps | sort(attribute="sqft", reverse=True) -%}
-- {{ row['last_sold_date'] }} | {{ row['sqft'] | format_numbers }} sqft | {{ row['street'] }} ({{ row['beds'] }}/{{ row['full_baths'] }}{% if row['half_baths'] is not none %}.5{% endif %}) - {{ row['days_on_mls'] }} days on market
+- {{ row['last_sold_date'] }} | {{ row['sqft'] | format_numbers }} sqft | [{{ row['street'] }}]({{ row['property_url'] }}) ({{ row['beds'] }}/{{ row['full_baths'] }}{% if row['half_baths'] is not none %}.5{% endif %}) - {{ row['days_on_mls'] }} days on market
 {% endfor -%}
 

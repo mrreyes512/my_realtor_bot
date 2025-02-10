@@ -15,7 +15,7 @@
 ### Location Info
 - **County**: Williamson
 - **Neighborhood**: Paloma Lake
-- **Schools**: Orenda Charter School, Round Rock Independent School District
+- **Schools**: Round Rock Independent School District, Orenda Charter School
 
 ### Latest Tax Assessment
 **2024**
@@ -42,11 +42,11 @@
 - **Sold DOM** (Min|Ave|Max): 27 | 79 | 142
 
 **Sold Listings**
-- 2025-01-23 | 3,438 sqft | 2601 Estefania Ln (5/4) - 140 days on market
-- 2024-12-20 | 3,095 sqft | 3335 Hidalgo Loop (5/3) - 42 days on market
-- 2025-01-13 | 3,068 sqft | 3733 Penelope Way (4/2.5) - 83 days on market
-- 2024-12-23 | 2,903 sqft | 3048 Margarita Loop (4/3.5) - 46 days on market
-- 2024-12-06 | 2,831 sqft | 3323 Pablo Cir (4/3.5) - 35 days on market
-- 2024-11-14 | 2,217 sqft | 3417 DE Soto Loop (4/3) - 142 days on market
-- 2024-12-03 | 2,066 sqft | 2912 Angelina Dr (3/2) - 116 days on market
-- 2024-12-19 | 2,061 sqft | 2967 Santa Rosita Dr (3/2) - 27 days on market
+- 2025-01-23 | 3,438 sqft | [2601 Estefania Ln](https://www.realtor.com/realestateandhomes-detail/2601-Estefania-Ln_Round-Rock_TX_78665_M75206-99716) (5/4) - 140 days on market
+- 2024-12-20 | 3,095 sqft | [3335 Hidalgo Loop](https://www.realtor.com/realestateandhomes-detail/3335-Hidalgo-Loop_Round-Rock_TX_78665_M79610-12050) (5/3) - 42 days on market
+- 2025-01-13 | 3,068 sqft | [3733 Penelope Way](https://www.realtor.com/realestateandhomes-detail/3733-Penelope-Way_Round-Rock_TX_78665_M72958-87766) (4/2.5) - 83 days on market
+- 2024-12-23 | 2,903 sqft | [3048 Margarita Loop](https://www.realtor.com/realestateandhomes-detail/Round-Rock_TX_78665_M83842-47473) (4/3.5) - 46 days on market
+- 2024-12-06 | 2,831 sqft | [3323 Pablo Cir](https://www.realtor.com/realestateandhomes-detail/3323-Pablo-Cir_Round-Rock_TX_78665_M76733-46946) (4/3.5) - 35 days on market
+- 2024-11-14 | 2,217 sqft | [3417 DE Soto Loop](https://www.realtor.com/realestateandhomes-detail/3417-DE-Soto-Loop_Round-Rock_TX_78665_M79565-77403) (4/3) - 142 days on market
+- 2024-12-03 | 2,066 sqft | [2912 Angelina Dr](https://www.realtor.com/realestateandhomes-detail/2912-Angelina-Dr_Round-Rock_TX_78665_M77486-66063) (3/2) - 116 days on market
+- 2024-12-19 | 2,061 sqft | [2967 Santa Rosita Dr](https://www.realtor.com/realestateandhomes-detail/2967-Santa-Rosita-Dr_Round-Rock_TX_78665_M85157-46725) (3/2) - 27 days on market
