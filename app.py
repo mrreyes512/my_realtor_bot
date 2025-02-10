@@ -85,11 +85,15 @@ def format_numbers(value, places=0):
     except (ValueError, TypeError):
         return value
 
+def average(lst):
+    return sum(lst) / len(lst) if lst else 0
+
 def generate_report(data, report):
 
     # Load the Jinja2 template
     env = Environment(loader=FileSystemLoader(template_path))
     env.filters['format_numbers'] = format_numbers
+    env.filters['average'] = average
     template = env.get_template(f"{report}.j2")
 
     if report == "property_report":
@@ -98,8 +102,9 @@ def generate_report(data, report):
     if report == "hood_report":
         # Get the first match of property_target = TRUE
         property_target = data[data['property_target'] == True].iloc[0]
+        # Ignore the target property
         comps = data[data['property_target'] == False].reset_index(drop=True)
-        print(comps)
+        # print(comps)
         report_content = template.render(property=property_target, comps=comps.to_dict(orient='records'), now=now)
 
     return report_content
@@ -137,8 +142,11 @@ def main(args):
 
     property_report = generate_report(target_df, report='property_report')
     # print(property_report)
+
     hood_report = generate_report(hood_df, report='hood_report')
-    print(hood_report)
+    # print(hood_report)
+
+    property_cma = property_report + hood_report
 
     if args.save:
         # Remove digits from the safe_address to create the directory name
@@ -152,7 +160,7 @@ def main(args):
         save_to_csv(hood_df, directory, filename=f"comps_{now}.csv")
         # save_to_csv(target_df, directory, filename=f"{safe_address}.csv")
 
-        save_to_csv(property_report, directory, filename=f"{safe_address}.md")
+        save_to_csv(property_cma, directory, filename=f"{safe_address}_CMA.md")
 
 
 if __name__ == "__main__":

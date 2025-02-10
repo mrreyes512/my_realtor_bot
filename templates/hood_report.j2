@@ -1,19 +1,20 @@
-# Comps - {{ property['street'] }}
-> {{ property['street'] }}, {{ property['city'] }}, {{ property['state'] }} {{ property['zip_code'] }}
-> (**Prepared on**: {{ now }})
+{% set sold_comps = comps | selectattr("status", "equalto", "SOLD") | list -%}
+{% set active_comps = comps | selectattr("status", "equalto", "FOR_SALE") | list -%}
+{% set pending_comps = comps | selectattr("status", "in", ["CONTINGENT", "PENDING"]) | list -%}
+{% set dom_min = sold_comps | map(attribute="days_on_mls") | list | min -%}
+{% set dom_ave = sold_comps | map(attribute="days_on_mls") | list | average | format_numbers -%}
+{% set dom_max = sold_comps | map(attribute="days_on_mls") | list | max -%}
+## Neighborhood Overview
+**{{ property['neighborhoods'] }}**
+- **Active For Sale** : {{ active_comps | count }}
+- **Pending Listings**: {{ pending_comps | count }}
 
-## Property Details
-- **List Price**: ${{ property['list_price'] | format_numbers }}
-- **Square Footage**: {{ property['sqft'] | format_numbers }}
-- **Lot Size**: {{ property['lot_sqft'] | format_numbers }}
-- **Beds | Baths | Half Baths**: {{ property['beds'] }} | {{ property['full_baths'] }} | {{ property['half_baths'] }}
-- **Stories | Garages**: {{ property['stories'] }} | {{ property['parking_garage'] }}
-- **County**: {{ property['county'] }}
-- **Neighborhood**: {{ property['neighborhoods'] }}
+### Past 90 days
+- **Sold Properties**: {{ sold_comps | count }}
+- **Sold DOM** (Min|Ave|Max): {{ dom_min }} | {{ dom_ave }} | {{ dom_max }}
 
-## Details - {{ property['neighborhoods'] }}
-> Past 3 Months
-
-- **Total Sold Properties**: {{ comps | selectattr("status", "equalto", "SOLD") | list | count }}
-
+**Sold Listings**
+{% for row in sold_comps | sort(attribute="sqft", reverse=True) -%}
+- {{ row['last_sold_date'] }} | {{ row['sqft'] | format_numbers }} sqft | {{ row['street'] }} ({{ row['beds'] }}/{{ row['full_baths'] }}{% if row['half_baths'] is not none %}.5{% endif %}) - {{ row['days_on_mls'] }} days on market
+{% endfor -%}
 
