@@ -8,9 +8,12 @@ homeharvest = "*"
 tabulate = "*"
 python-dotenv = "*"
 jinja2 = "*"
+pendulum = "*"
+openai = "*"
 
 [dev-packages]
 pylint = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.12"
