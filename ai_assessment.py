@@ -19,10 +19,10 @@ logging.basicConfig(
     level=logging.WARNING
     )
 
-def call_chat_gpt(prompt, target_content):
+def call_chat_gpt(prompt, question, target_content):
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
-        prompt=f"{prompt}\n\n{target_content}",
+        prompt=f"{prompt}\n{question}\n{target_content}",
         max_tokens=150
     )
     return response.choices[0].text.strip()
@@ -67,15 +67,16 @@ def main(args):
         return
 
     questions = get_questions()
-    responses = []
+    responses = "# AI Analysis\n\n"
+    responses += f"> Target File: {target_file}\n\n"
     for question in questions:
-        response = call_chat_gpt(f"{prompt}\n\n{question}", target_content)
-        log.info(f"ChatGPT Response for '{question}': {response}")
-        responses.append(f"Question: {question}\nResponse: {response}\n")
+        response = call_chat_gpt(prompt, question, target_content)
+        log.debug(f"ChatGPT Response for '{question}': {response}")
+        responses += f"## {question}\n{response}\n\n"
 
     analysis_file = os.path.join(os.path.dirname(target_file), "AI_analysis.md")
     with open(analysis_file, 'w') as file:
-        file.write("\n".join(responses))
+        file.write(responses)
     log.info(f"Responses saved to {analysis_file}")
 
 if __name__ == "__main__":
